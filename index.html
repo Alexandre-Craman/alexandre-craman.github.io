@@ -6,35 +6,30 @@
   <title>Prénom Nom — Compositeur</title>
   <meta name="description" content="Compositeur de musique électroacoustique." />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Neue+Haas+Grotesk+Display+Pro:wght@400;500&family=DM+Mono:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
 
   <style>
-    /* ─── Reset ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
-    /* ─── Variables ─────────────────────────────────────── */
     :root {
-      --bg:        #0c0b0b;
-      --surface:   #141313;
-      --border:    rgba(255,255,255,0.08);
-      --text:      #e8e4df;
-      --muted:     rgba(232,228,223,0.45);
-      --accent:    #c8b89a;
-      --serif:     'Cormorant Garamond', Georgia, serif;
-      --sans:      'Neue Haas Grotesk Display Pro', 'Helvetica Neue', Arial, sans-serif;
-      --mono:      'DM Mono', 'Courier New', monospace;
-      --nav-h:     64px;
+      --bg:      #0c0b0b;
+      --surface: #141313;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #e8e4df;
+      --muted:   rgba(232,228,223,0.45);
+      --accent:  #c8b89a;
+      --serif:   'Cormorant Garamond', Georgia, serif;
+      --mono:    'DM Mono', 'Courier New', monospace;
+      --nav-h:   64px;
     }
 
-    /* ─── Base ───────────────────────────────────────────── */
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--sans);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
       font-size: 15px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -43,7 +38,7 @@
 
     a { color: inherit; text-decoration: none; }
 
-    /* ─── Nav ────────────────────────────────────────────── */
+    /* ── NAV ───────────────────────────────────────────── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -52,8 +47,8 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 40px;
-      z-index: 100;
-      background: linear-gradient(to bottom, rgba(12,11,11,0.95) 0%, transparent 100%);
+      z-index: 200;
+      background: linear-gradient(to bottom, rgba(12,11,11,0.96) 0%, transparent 100%);
       backdrop-filter: blur(2px);
     }
 
@@ -62,14 +57,10 @@
       font-size: 18px;
       font-weight: 400;
       letter-spacing: 0.04em;
-      color: var(--text);
+      cursor: pointer;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
 
     .nav-links a {
       font-size: 12px;
@@ -77,11 +68,21 @@
       text-transform: uppercase;
       color: var(--muted);
       transition: color 0.2s;
+      cursor: pointer;
     }
 
     .nav-links a:hover { color: var(--text); }
 
-    /* ─── Hero ───────────────────────────────────────────── */
+    /* ── VIEWS ─────────────────────────────────────────── */
+    .view { display: none; animation: viewIn 0.35s ease forwards; }
+    .view.active { display: block; }
+
+    @keyframes viewIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── HERO ──────────────────────────────────────────── */
     .hero {
       height: 100vh;
       min-height: 600px;
@@ -91,10 +92,13 @@
       overflow: hidden;
     }
 
+    .hero-bg-fallback {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 60%, #1a1512 0%, #0c0b0b 70%);
+    }
+
     .hero-bg {
-      position: absolute;
-      inset: 0;
-      /* Remplacez cette URL par votre propre image */
+      position: absolute; inset: 0;
       background-image: url('images/hero.jpg');
       background-size: cover;
       background-position: center;
@@ -104,13 +108,6 @@
     }
 
     .hero:hover .hero-bg { transform: scale(1); }
-
-    /* Fallback dégradé si pas d'image */
-    .hero-bg-fallback {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 30% 60%, #1a1512 0%, #0c0b0b 70%);
-    }
 
     .hero-content {
       position: relative;
@@ -138,15 +135,10 @@
       animation: fadeUp 0.8s 0.5s forwards;
     }
 
-    .hero-title em {
-      font-style: italic;
-      color: var(--accent);
-    }
+    .hero-title em { font-style: italic; color: var(--accent); }
 
-    /* ─── Sections communes ──────────────────────────────── */
-    section {
-      padding: 100px 40px;
-    }
+    /* ── SECTIONS ──────────────────────────────────────── */
+    section { padding: 100px 40px; }
 
     .section-label {
       font-family: var(--mono);
@@ -167,40 +159,24 @@
       background: var(--border);
     }
 
-    /* ─── Bio ─────────────────────────────────────────────── */
+    /* ── BIO ───────────────────────────────────────────── */
     #bio {
       border-top: 1px solid var(--border);
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 80px;
-      align-items: start;
     }
-
-    .bio-left {}
 
     .bio-text {
       font-family: var(--serif);
       font-size: clamp(22px, 2.8vw, 32px);
       font-weight: 300;
       line-height: 1.4;
-      color: var(--text);
     }
 
-    .bio-text em {
-      font-style: italic;
-      color: var(--accent);
-    }
+    .bio-text em { font-style: italic; color: var(--accent); }
 
-    .bio-right {
-      padding-top: 16px;
-    }
-
-    .bio-detail {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
+    .bio-detail { font-size: 14px; color: var(--muted); line-height: 1.8; }
     .bio-detail p + p { margin-top: 1em; }
 
     .bio-photo {
@@ -211,19 +187,15 @@
       filter: grayscale(20%) brightness(0.9);
     }
 
-    /* ─── Galerie ─────────────────────────────────────────── */
+    /* ── WORKS GRID ────────────────────────────────────── */
     #works {
-      padding-left: 0;
-      padding-right: 0;
+      padding-left: 0; padding-right: 0;
       border-top: 1px solid var(--border);
     }
 
     #works .section-label { padding: 0 40px; }
 
-    .works-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-    }
+    .works-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
 
     .work-item {
       position: relative;
@@ -233,8 +205,7 @@
     }
 
     .work-item img {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
       transition: transform 0.6s ease, filter 0.4s ease;
       filter: brightness(0.75) grayscale(15%);
@@ -246,14 +217,25 @@
     }
 
     .work-overlay {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       padding: 28px;
-      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 55%);
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%);
+      pointer-events: none;
     }
+
+    .work-arrow {
+      position: absolute;
+      top: 20px; right: 20px;
+      font-size: 20px;
+      color: var(--accent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .work-item:hover .work-arrow { opacity: 1; }
 
     .work-year {
       font-family: var(--mono);
@@ -272,18 +254,13 @@
 
     .work-title em { font-style: italic; }
 
-    /* ─── SoundCloud ──────────────────────────────────────── */
+    /* ── SOUNDCLOUD ────────────────────────────────────── */
     #ecouter {
       border-top: 1px solid var(--border);
       background: var(--surface);
     }
 
-    .sc-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
+    .sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
 
     .sc-text h2 {
       font-family: var(--serif);
@@ -293,12 +270,7 @@
       margin-bottom: 20px;
     }
 
-    .sc-text p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.8;
-      max-width: 360px;
-    }
+    .sc-text p { color: var(--muted); font-size: 14px; line-height: 1.8; max-width: 360px; }
 
     .sc-link {
       display: inline-flex;
@@ -316,27 +288,10 @@
     }
 
     .sc-link:hover { opacity: 0.7; }
+    .sc-player iframe { width: 100%; border-radius: 2px; filter: brightness(0.9); }
 
-    .sc-player {
-      /* Remplacez l'URL du iframe SoundCloud par la vôtre */
-    }
-
-    .sc-player iframe {
-      width: 100%;
-      border-radius: 2px;
-      filter: brightness(0.9);
-    }
-
-    /* ─── Dates ───────────────────────────────────────────── */
-    #dates {
-      border-top: 1px solid var(--border);
-    }
-
-    .dates-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
+    /* ── AGENDA ────────────────────────────────────────── */
+    #dates { border-top: 1px solid var(--border); }
 
     .date-item {
       display: grid;
@@ -345,31 +300,12 @@
       align-items: baseline;
       padding: 28px 0;
       border-bottom: 1px solid var(--border);
-      transition: background 0.2s;
     }
 
-    .date-item:first-child { border-top: 1px solid var(--border); }
-
-    .date-date {
-      font-family: var(--mono);
-      font-size: 13px;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-    }
-
-    .date-info {}
-
-    .date-title {
-      font-family: var(--serif);
-      font-size: 22px;
-      font-weight: 300;
-    }
-
-    .date-place {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
+    .date-item:first-of-type { border-top: 1px solid var(--border); }
+    .date-date { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 0.05em; }
+    .date-title { font-family: var(--serif); font-size: 22px; font-weight: 300; }
+    .date-place { font-size: 13px; color: var(--muted); margin-top: 4px; }
 
     .date-type {
       font-family: var(--mono);
@@ -385,7 +321,7 @@
 
     .date-item.past { opacity: 0.4; }
 
-    /* ─── Contact / Footer ──────────────────────────────── */
+    /* ── FOOTER ────────────────────────────────────────── */
     footer {
       border-top: 1px solid var(--border);
       padding: 60px 40px;
@@ -395,37 +331,157 @@
       align-items: end;
     }
 
-    .footer-name {
+    .footer-name { font-family: var(--serif); font-size: 36px; font-weight: 300; line-height: 1; }
+    .footer-copy { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; margin-top: 40px; opacity: 0.5; }
+    .footer-contact { font-size: 13px; color: var(--muted); line-height: 2; }
+    .footer-contact a { color: var(--text); border-bottom: 1px solid var(--border); transition: border-color 0.2s; }
+    .footer-contact a:hover { border-color: var(--text); }
+
+    /* ════════════════════════════════════════════════════
+       PAGE DÉTAIL ŒUVRE
+    ════════════════════════════════════════════════════ */
+    #view-work { min-height: 100vh; }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: calc(var(--nav-h) + 40px) 40px 0;
+    }
+
+    .back-btn:hover { color: var(--text); }
+
+    /* Image héro de la page détail */
+    .work-detail-hero {
+      width: 100%;
+      height: 65vh;
+      min-height: 400px;
+      position: relative;
+      overflow: hidden;
+      margin-top: 32px;
+    }
+
+    .work-detail-hero img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.55);
+    }
+
+    .work-detail-hero-fallback {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #1a1410, #0d0c0a);
+    }
+
+    .work-detail-hero-meta {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 40px;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+    }
+
+    .work-detail-year {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .work-detail-title {
       font-family: var(--serif);
-      font-size: 36px;
+      font-size: clamp(36px, 6vw, 72px);
       font-weight: 300;
       line-height: 1;
     }
 
-    .footer-contact {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 2;
+    .work-detail-title em { font-style: italic; color: var(--accent); }
+
+    /* Corps */
+    .work-detail-body {
+      padding: 80px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      border-top: 1px solid var(--border);
     }
 
-    .footer-contact a {
-      color: var(--text);
-      border-bottom: 1px solid var(--border);
-      transition: border-color 0.2s;
+    .work-detail-description {
+      font-family: var(--serif);
+      font-size: clamp(18px, 2.2vw, 24px);
+      font-weight: 300;
+      line-height: 1.5;
+      margin-bottom: 32px;
     }
 
-    .footer-contact a:hover { border-color: var(--text); }
+    .work-detail-notes { font-size: 14px; color: var(--muted); line-height: 1.9; }
+    .work-detail-notes p + p { margin-top: 1em; }
 
-    .footer-copy {
+    .work-detail-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+
+    .work-detail-tag {
       font-family: var(--mono);
       font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--muted);
-      letter-spacing: 0.1em;
-      margin-top: 40px;
-      opacity: 0.5;
+      border: 1px solid var(--border);
+      padding: 5px 12px;
     }
 
-    /* ─── Animations ─────────────────────────────────────── */
+    .work-detail-player-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .work-detail-player-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .work-detail-player iframe { width: 100%; border-radius: 2px; }
+
+    /* Nav précédent / suivant */
+    .work-detail-nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .work-nav-btn {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .work-nav-btn:hover { color: var(--text); }
+    .work-nav-btn.hidden { visibility: hidden; pointer-events: none; }
+
+    /* ── ANIMATIONS ────────────────────────────────────── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -437,244 +493,344 @@
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
 
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
+    .reveal.visible { opacity: 1; transform: none; }
 
-    /* ─── Responsive ─────────────────────────────────────── */
+    /* ── RESPONSIVE ────────────────────────────────────── */
     @media (max-width: 900px) {
       nav { padding: 0 24px; }
-      .nav-links { gap: 20px; }
-
       section { padding: 72px 24px; }
       #works .section-label { padding: 0 24px; }
-
       #bio { grid-template-columns: 1fr; gap: 40px; }
-
       .works-grid { grid-template-columns: 1fr 1fr; }
-
       .sc-grid { grid-template-columns: 1fr; gap: 40px; }
-
       .date-item { grid-template-columns: 90px 1fr; }
       .date-type { display: none; }
-
       footer { grid-template-columns: 1fr; }
+      .work-detail-body { grid-template-columns: 1fr; gap: 40px; }
+      .work-detail-nav { padding: 24px; }
     }
 
     @media (max-width: 600px) {
       .works-grid { grid-template-columns: 1fr; }
       .hero-content { padding: 0 24px 48px; }
       .nav-links { display: none; }
+      .work-detail-body { padding: 40px 24px; }
+      .back-btn { padding: calc(var(--nav-h) + 20px) 24px 0; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ─── Nav ─────────────────────────────────────────── -->
+  <!-- ─── NAV ──────────────────────────────────────────── -->
   <nav>
-    <a href="#" class="nav-name">Prénom Nom</a>
+    <span class="nav-name" onclick="showHome()">Prénom Nom</span>
     <ul class="nav-links">
-      <li><a href="#bio">Biographie</a></li>
-      <li><a href="#works">Œuvres</a></li>
-      <li><a href="#ecouter">Écouter</a></li>
-      <li><a href="#dates">Agenda</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a onclick="showHome('bio')">Biographie</a></li>
+      <li><a onclick="showHome('works')">Œuvres</a></li>
+      <li><a onclick="showHome('ecouter')">Écouter</a></li>
+      <li><a onclick="showHome('dates')">Agenda</a></li>
+      <li><a onclick="showHome('contact')">Contact</a></li>
     </ul>
   </nav>
 
-  <!-- ─── Hero ─────────────────────────────────────────── -->
-  <section class="hero" id="top">
-    <!-- Remplacez images/hero.jpg par votre propre image -->
-    <div class="hero-bg-fallback"></div>
-    <div class="hero-bg" style="background-image: url('images/hero.jpg');"></div>
-    <div class="hero-content">
-      <p class="hero-label">Musique électroacoustique</p>
-      <h1 class="hero-title">Prénom<br><em>Nom</em></h1>
-    </div>
-  </section>
+  <!-- ════════════════════════════════════════════════════
+       VUE ACCUEIL
+  ════════════════════════════════════════════════════ -->
+  <div id="view-home" class="view active">
 
-  <!-- ─── Bio ──────────────────────────────────────────── -->
-  <section id="bio">
-    <div class="bio-left">
-      <p class="section-label">Biographie</p>
-      <p class="bio-text reveal">
-        Compositeur de musique <em>électroacoustique</em>,
-        [votre nom] explore les rapports entre matière sonore,
-        espace et perception à travers des pièces acousmatiques
-        et des installations.
-      </p>
-    </div>
-    <div class="bio-right">
-      <p class="bio-detail reveal">
-        Né à [ville], [votre nom] a étudié la composition électroacoustique
-        au [Conservatoire / université]. Ses œuvres ont été jouées
-        dans des festivals tels que [festival 1], [festival 2]
-        et [festival 3].
-      </p>
-      <p class="bio-detail reveal">
-        Son travail interroge [thématiques : l'espace, la mémoire,
-        le paysage sonore…]. Il collabore régulièrement avec
-        des artistes visuels et des performeurs.
-      </p>
-      <!-- Optionnel : décommentez et remplacez par votre photo -->
-      <!-- <img class="bio-photo" src="images/portrait.jpg" alt="Portrait de [votre nom]" /> -->
-    </div>
-  </section>
-
-  <!-- ─── Œuvres / Galerie ──────────────────────────────── -->
-  <section id="works">
-    <p class="section-label">Œuvres</p>
-    <div class="works-grid">
-
-      <!-- Répétez ce bloc pour chaque œuvre. Remplacez image, année, titre. -->
-      <div class="work-item reveal">
-        <img src="images/work1.jpg" alt="Titre de l'œuvre 1" />
-        <!-- Fallback couleur si pas d'image -->
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1410,#0d0c0a);z-index:-1;"></div>
-        <div class="work-overlay">
-          <p class="work-year">2024</p>
-          <p class="work-title">Titre de l'<em>œuvre</em></p>
-        </div>
+    <section class="hero">
+      <div class="hero-bg-fallback"></div>
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <p class="hero-label">Musique électroacoustique</p>
+        <h1 class="hero-title">Prénom<br><em>Nom</em></h1>
       </div>
+    </section>
 
-      <div class="work-item reveal">
-        <img src="images/work2.jpg" alt="Titre de l'œuvre 2" />
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0e1318,#0c0b0b);z-index:-1;"></div>
-        <div class="work-overlay">
-          <p class="work-year">2023</p>
-          <p class="work-title"><em>Autre</em> œuvre</p>
-        </div>
-      </div>
-
-      <div class="work-item reveal">
-        <img src="images/work3.jpg" alt="Titre de l'œuvre 3" />
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#110f0c,#0c0b0b);z-index:-1;"></div>
-        <div class="work-overlay">
-          <p class="work-year">2022</p>
-          <p class="work-title">Troisième <em>pièce</em></p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ─── Écouter / SoundCloud ──────────────────────────── -->
-  <section id="ecouter">
-    <div class="sc-grid">
-      <div class="sc-text reveal">
-        <p class="section-label">Écouter</p>
-        <h2>Découvrez<br><em>le travail sonore</em></h2>
-        <p>
-          Une sélection de pièces disponibles en écoute libre.
-          Pour l'intégralité du catalogue, rendez-vous sur SoundCloud.
+    <section id="bio">
+      <div>
+        <p class="section-label">Biographie</p>
+        <p class="bio-text reveal">
+          Compositeur de musique <em>électroacoustique</em>,
+          [votre nom] explore les rapports entre matière sonore,
+          espace et perception à travers des pièces acousmatiques
+          et des installations.
         </p>
-        <!-- Remplacez le lien href par votre profil SoundCloud -->
-        <a class="sc-link" href="https://soundcloud.com/votre-profil" target="_blank" rel="noopener">
-          Voir le profil complet →
-        </a>
       </div>
-      <div class="sc-player reveal">
-        <!--
-          Pour intégrer votre SoundCloud :
-          1. Allez sur votre morceau ou playlist SoundCloud
-          2. Cliquez sur "Partager" → "Intégrer"
-          3. Copiez le code iframe et remplacez celui ci-dessous
+      <div>
+        <div class="bio-detail reveal">
+          <p>
+            Né à [ville], [votre nom] a étudié la composition électroacoustique
+            au [Conservatoire / université]. Ses œuvres ont été créées dans des
+            festivals tels que [festival 1], [festival 2] et [festival 3].
+          </p>
+          <p>
+            Son travail interroge [thématiques : l'espace, la mémoire,
+            le paysage sonore…]. Il collabore régulièrement avec
+            des artistes visuels et des performeurs.
+          </p>
+        </div>
+        <!-- <img class="bio-photo" src="images/portrait.jpg" alt="Portrait" /> -->
+      </div>
+    </section>
 
-          Exemple de lecteur playlist :
-        -->
-        <iframe
-          width="100%"
-          height="450"
-          scrolling="no"
-          frameborder="no"
-          allow="autoplay"
-          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/VOTRE_ID_UTILISATEUR&color=%23c8b89a&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true">
-        </iframe>
+    <section id="works">
+      <p class="section-label">Œuvres</p>
+      <div class="works-grid" id="works-grid"></div>
+    </section>
+
+    <section id="ecouter">
+      <div class="sc-grid">
+        <div class="sc-text reveal">
+          <p class="section-label">Écouter</p>
+          <h2>Découvrez<br><em>le travail sonore</em></h2>
+          <p>
+            Une sélection de pièces disponibles en écoute libre.
+            Pour l'intégralité du catalogue, rendez-vous sur SoundCloud.
+          </p>
+          <a class="sc-link" href="https://soundcloud.com/votre-profil" target="_blank" rel="noopener">
+            Voir le profil complet →
+          </a>
+        </div>
+        <div class="sc-player reveal">
+          <!-- Remplacez le src par votre embed SoundCloud (profil ou playlist) -->
+          <iframe
+            width="100%" height="450"
+            scrolling="no" frameborder="no" allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/VOTRE_ID&color=%23c8b89a&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true">
+          </iframe>
+        </div>
+      </div>
+    </section>
+
+    <section id="dates">
+      <p class="section-label">Agenda</p>
+      <div id="dates-list"></div>
+    </section>
+
+    <footer id="contact">
+      <div>
+        <p class="footer-name">Prénom<br>Nom</p>
+        <p class="footer-copy">© 2025 — Musique électroacoustique</p>
+      </div>
+      <div class="footer-contact">
+        <p>Contact</p>
+        <p><a href="mailto:votre@email.com">votre@email.com</a></p>
+        <br/>
+        <p>SoundCloud</p>
+        <p><a href="https://soundcloud.com/votre-profil" target="_blank" rel="noopener">soundcloud.com/votre-profil</a></p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════
+       VUE DÉTAIL ŒUVRE
+  ════════════════════════════════════════════════════ -->
+  <div id="view-work" class="view">
+
+    <div class="back-btn" onclick="goBack()">← Toutes les œuvres</div>
+
+    <div class="work-detail-hero">
+      <div class="work-detail-hero-fallback"></div>
+      <img id="detail-img" src="" alt="" onerror="this.style.opacity='0'" />
+      <div class="work-detail-hero-meta">
+        <p class="work-detail-year" id="detail-year"></p>
+        <h1 class="work-detail-title" id="detail-title"></h1>
       </div>
     </div>
-  </section>
 
-  <!-- ─── Agenda ────────────────────────────────────────── -->
-  <section id="dates">
-    <p class="section-label">Agenda</p>
-    <div class="dates-list">
-
-      <!-- Événement à venir → retirez class="past" -->
-      <div class="date-item reveal">
-        <p class="date-date">15 mai 2025</p>
-        <div class="date-info">
-          <p class="date-title">Titre de la pièce / événement</p>
-          <p class="date-place">Lieu — Ville, Pays</p>
-        </div>
-        <p class="date-type">Concert</p>
+    <div class="work-detail-body">
+      <div>
+        <p class="work-detail-description" id="detail-description"></p>
+        <div class="work-detail-notes" id="detail-notes"></div>
+        <div class="work-detail-tags" id="detail-tags"></div>
       </div>
-
-      <div class="date-item reveal">
-        <p class="date-date">3 juin 2025</p>
-        <div class="date-info">
-          <p class="date-title">Autre événement ou échéance</p>
-          <p class="date-place">Lieu — Ville</p>
-        </div>
-        <p class="date-type">Festival</p>
+      <div>
+        <p class="work-detail-player-label">Écouter</p>
+        <div id="detail-player"></div>
       </div>
-
-      <div class="date-item reveal">
-        <p class="date-date">12 sept. 2025</p>
-        <div class="date-info">
-          <p class="date-title">Résidence de création</p>
-          <p class="date-place">Centre de résidence — Ville</p>
-        </div>
-        <p class="date-type">Résidence</p>
-      </div>
-
-      <!-- Événement passé → ajoutez class="past" -->
-      <div class="date-item past">
-        <p class="date-date">8 mars 2025</p>
-        <div class="date-info">
-          <p class="date-title">Événement passé</p>
-          <p class="date-place">Lieu — Ville</p>
-        </div>
-        <p class="date-type">Création</p>
-      </div>
-
     </div>
-  </section>
 
-  <!-- ─── Footer / Contact ─────────────────────────────── -->
-  <footer id="contact">
-    <div>
-      <p class="footer-name">Prénom<br>Nom</p>
-      <p class="footer-copy">© 2025 — Musique électroacoustique</p>
+    <div class="work-detail-nav">
+      <div class="work-nav-btn" id="btn-prev" onclick="navigateWork(-1)">← Précédente</div>
+      <div class="work-nav-btn" id="btn-next" onclick="navigateWork(1)">Suivante →</div>
     </div>
-    <div class="footer-contact">
-      <p>Contact</p>
-      <!-- Remplacez par votre email -->
-      <p><a href="mailto:votre@email.com">votre@email.com</a></p>
-      <br/>
-      <p>SoundCloud</p>
-      <p><a href="https://soundcloud.com/votre-profil" target="_blank" rel="noopener">soundcloud.com/votre-profil</a></p>
-    </div>
-  </footer>
 
-  <!-- ─── Script d'animation au scroll ─────────────────── -->
+  </div>
+
+  <!-- ════════════════════════════════════════════════════
+       DONNÉES — modifiez uniquement cette section
+  ════════════════════════════════════════════════════ -->
   <script>
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry, i) => {
-          if (entry.isIntersecting) {
-            // Léger décalage en cascade pour les éléments groupés
-            setTimeout(() => {
-              entry.target.classList.add('visible');
-            }, 80);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
+  /* ──────────────────────────────────────────────────────
+     WORKS — votre catalogue
+     ──────────────────────────────────────────────────────
+     id          → slug unique (utilisé dans l'URL, ex: #horizons)
+     year        → année affichée
+     title       → HTML (vous pouvez utiliser <em>…</em>)
+     image       → chemin vers l'image (ex: images/horizons.jpg)
+     description → phrase d'accroche de la page détail
+     notes       → texte long de la page détail (HTML autorisé)
+     tags        → tableau de mots-clés
+     soundcloud  → src du <iframe> SoundCloud du morceau
+                   (SoundCloud → bouton Partager → Intégrer → copier la valeur de src)
+  ────────────────────────────────────────────────────── */
+  const WORKS = [
+    {
+      id:          "horizons",
+      year:        "2022–2023",
+      title:       "<em>Horizons</em>",
+      image:       "images/work1.jpg",
+      description: "Pièce acousmatique en huit canaux explorant la dissolution progressive des frontières entre matière et espace.",
+      notes:       `<p>Créée lors du festival [nom du festival] en 2023, <em>Horizons</em> part d'enregistrements de terrain réalisés dans [lieu / contexte]. Le travail de spatialisation s'articule autour de la notion de seuil : entre le proche et le lointain, l'intérieur et l'extérieur.</p><p>Durée : 18 min. Support : 8 canaux.</p>`,
+      tags:        ["Acousmatique", "8 canaux", "Terrain"],
+      soundcloud:  "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/TRACK_ID_1&color=%23c8b89a&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true"
+    },
+    {
+      id:          "collisions",
+      year:        "2023",
+      title:       "Collisions",
+      image:       "images/work2.jpg",
+      description: "Étude sur la rencontre violente et la résonance entre blocs de matière sonore synthétique.",
+      notes:       `<p>Composée au studio [nom du studio], <em>Collisions</em> explore la physique métaphorique du choc : compression, rebond, désintégration. La pièce est construite exclusivement à partir de sons de synthèse.</p><p>Durée : 12 min. Support : stéréo.</p>`,
+      tags:        ["Synthèse", "Stéréo", "Studio"],
+      soundcloud:  "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/TRACK_ID_2&color=%23c8b89a&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true"
+    },
+    {
+      id:          "plastic-boom",
+      year:        "2021",
+      title:       "Plastic <em>Boom</em>",
+      image:       "images/work3.jpg",
+      description: "Composition électroacoustique mixte pour saxophone et électronique en temps réel.",
+      notes:       `<p><em>Plastic Boom</em> est né d'une collaboration avec le saxophoniste [nom]. L'électronique prolonge et transforme en temps réel les gestes instrumentaux, créant un dialogue entre le corps de l'interprète et l'espace acoustique traité.</p><p>Durée : 15 min. Support : mixte (saxophone + électronique temps réel).</p>`,
+      tags:        ["Mixte", "Saxophone", "Temps réel"],
+      soundcloud:  "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/TRACK_ID_3&color=%23c8b89a&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true"
+    }
+  ];
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  /* ──────────────────────────────────────────────────────
+     DATES — votre agenda
+     past: true → affiché en opacité réduite
+  ────────────────────────────────────────────────────── */
+  const DATES = [
+    { date: "15 mai 2025",   title: "Titre de la pièce / événement", place: "Lieu — Ville, Pays", type: "Concert",   past: false },
+    { date: "3 juin 2025",   title: "Autre événement ou échéance",    place: "Lieu — Ville",       type: "Festival",  past: false },
+    { date: "12 sept. 2025", title: "Résidence de création",          place: "Centre — Ville",     type: "Résidence", past: false },
+    { date: "8 mars 2025",   title: "Événement passé",                place: "Lieu — Ville",       type: "Création",  past: true  }
+  ];
+
+  /* ════════════════════════════════════════════════════
+     MOTEUR — ne pas modifier
+  ════════════════════════════════════════════════════ */
+  let currentIdx = 0;
+
+  function renderWorksGrid() {
+    document.getElementById('works-grid').innerHTML = WORKS.map(w => `
+      <div class="work-item reveal" onclick="showWork('${w.id}')">
+        <img src="${w.image}" alt="${w.title.replace(/<[^>]+>/g,'')}" onerror="this.style.opacity='0'" />
+        <span class="work-arrow">↗</span>
+        <div class="work-overlay">
+          <p class="work-year">${w.year}</p>
+          <p class="work-title">${w.title}</p>
+        </div>
+      </div>
+    `).join('');
+    observeReveal();
+  }
+
+  function renderDates() {
+    document.getElementById('dates-list').innerHTML = DATES.map(d => `
+      <div class="date-item${d.past ? ' past' : ''} reveal">
+        <p class="date-date">${d.date}</p>
+        <div>
+          <p class="date-title">${d.title}</p>
+          <p class="date-place">${d.place}</p>
+        </div>
+        <p class="date-type">${d.type}</p>
+      </div>
+    `).join('');
+    observeReveal();
+  }
+
+  function showWork(id) {
+    const idx = WORKS.findIndex(w => w.id === id);
+    if (idx === -1) return;
+    currentIdx = idx;
+    const w = WORKS[idx];
+
+    document.getElementById('detail-year').textContent       = w.year;
+    document.getElementById('detail-title').innerHTML        = w.title;
+    document.getElementById('detail-img').src                = w.image;
+    document.getElementById('detail-img').alt                = w.title.replace(/<[^>]+>/g,'');
+    document.getElementById('detail-description').textContent = w.description;
+    document.getElementById('detail-notes').innerHTML        = w.notes;
+    document.getElementById('detail-tags').innerHTML         = w.tags.map(t => `<span class="work-detail-tag">${t}</span>`).join('');
+    document.getElementById('detail-player').innerHTML       = `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="${w.soundcloud}"></iframe>`;
+
+    document.getElementById('btn-prev').classList.toggle('hidden', idx === 0);
+    document.getElementById('btn-next').classList.toggle('hidden', idx === WORKS.length - 1);
+
+    history.pushState({ work: id }, '', `#${id}`);
+    switchView('work');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  function navigateWork(dir) {
+    const next = currentIdx + dir;
+    if (next >= 0 && next < WORKS.length) showWork(WORKS[next].id);
+  }
+
+  function showHome(anchor) {
+    history.pushState({}, '', window.location.pathname);
+    switchView('home');
+    if (anchor) {
+      setTimeout(() => {
+        const el = document.getElementById(anchor);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }
+
+  function goBack() {
+    history.back();
+  }
+
+  function switchView(name) {
+    document.getElementById('view-home').classList.toggle('active', name === 'home');
+    document.getElementById('view-work').classList.toggle('active', name === 'work');
+  }
+
+  window.addEventListener('popstate', () => {
+    const hash = window.location.hash.slice(1);
+    if (hash && WORKS.find(w => w.id === hash)) {
+      showWork(hash);
+    } else {
+      switchView('home');
+    }
+  });
+
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), 80);
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  function observeReveal() {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderWorksGrid();
+    renderDates();
+    observeReveal();
+    const hash = window.location.hash.slice(1);
+    if (hash && WORKS.find(w => w.id === hash)) showWork(hash);
+  });
   </script>
 
 </body>
