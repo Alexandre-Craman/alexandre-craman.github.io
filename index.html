@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alexandre Craman — Compositeur</title>
+  <meta name="description" content="Compositeur de musique électroacoustique." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --bg:      #f1efec;
+      --surface: #ebe6e0;
+      --border:  rgba(0, 0, 0, 0.08);
+      --text:    #0b0b0bf0;
+      --muted:   rgba(46, 46, 46, 0.809);
+      --accent:  #3b3b3b;
+      --serif:   'Cormorant Garamond', Georgia, serif;
+      --mono:    'DM Mono', 'Courier New', monospace;
+      --nav-h:   64px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ══════════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 200;
+      background: linear-gradient(to bottom, #9e9e9e57 0%, transparent 100%);
+      backdrop-filter: blur(4px);
+      color: var(--text);
+      transition: color 0.25s ease, background 0.25s ease;
+    }
+
+    nav.on-hero {
+      color: var(--bg);
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.34) 0%, transparent 100%);
+    }
+
+    nav.on-work-hero {
+      color: var(--bg);
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.34) 0%, transparent 100%);
+    }
+
+    .nav-name {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: currentColor;
+      cursor: pointer;
+    }
+
+    .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+
+    .nav-links a {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: currentColor;
+      opacity: 1;
+      transition: none;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a.active { opacity: 0.7; }
+
+    /* ══════════════════════════════════════════════
+       VIEWS
+    ══════════════════════════════════════════════ */
+    .view { display: none; }
+    .view.active { display: block; animation: viewIn 0.3s ease; }
+
+    @keyframes viewIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ══════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════ */
+    .hero {
+      height: 100vh; min-height: 600px;
+      position: relative; display: flex; align-items: flex-end; overflow: hidden;
+    }
+
+    .hero-bg-fallback {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 60%, #1a1512 0%, #0c0b0b 70%);
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/hero.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.8);
+      transform: scale(1.02); transition: transform 8s ease;
+    }
+
+    .hero:hover .hero-bg { transform: scale(1); }
+
+        /* Voile sombre en bas pour lisibilité du texte */
+    .hero::after {
+      content: ''; position:absolute ; bottom: 0; left: 0; right: 0;
+      height: 30%; pointer-events: none;
+      background: linear-gradient(to top, #f1efec 0%, transparent 100%);
+      z-index: 1;
+    }
+    
+    .hero-content { position: relative; padding: 0 40px 60px; z-index: 2; }
+
+    .hero-label {
+      font-family: var(--mono); font-size: 20px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--bg); margin-bottom: 12px;
+      opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(52px, 8vw, 100px);
+      /*font-style: italic;*/
+      color: var(--bg);
+      font-weight: 300; line-height: 0.95; letter-spacing: -0.01em;
+      opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+      z-index: 1;
+    }
+
+    .hero-title em { font-style: normal; color: var(--bg); z-index: 1; }
+
+    .hero-scroll-indicator {
+      position: absolute;
+      left: 50%;
+      bottom: 24px;
+      z-index: 2;
+      transform: translateX(-50%);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      pointer-events: none;
+      opacity: 0.9;
+      animation: heroScrollFloat 2.2s ease-in-out infinite;
+    }
+
+    .hero-scroll-indicator span {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .hero-scroll-chevron {
+      width: 16px;
+      height: 16px;
+      border-right: 1.5px solid var(--text);
+      border-bottom: 1.5px solid var(--text);
+      transform: rotate(45deg);
+      opacity: 0.82;
+    }
+
+    @keyframes heroScrollFloat {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.72; }
+      50% { transform: translateX(-50%) translateY(6px); opacity: 1; }
+    }
+
+    /* ══════════════════════════════════════════════
+       SECTIONS communes
+    ══════════════════════════════════════════════ */
+    section { padding: 100px 40px; }
+
+    .section-label {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 48px;
+      display: flex; align-items: center; gap: 16px;
+    }
+
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .page-title {
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 300; line-height: 0.95;
+      margin-bottom: 16px;
+    }
+
+    .page-title em { font-style: italic; color: var(--accent); }
+
+    .page-intro { font-size: 14px; color: var(--muted); line-height: 1.9; max-width: 560px; margin-bottom: 60px; }
+
+    /* ══════════════════════════════════════════════
+       BIO accueil (résumé)
+    ══════════════════════════════════════════════ */
+    #bio {
+      border-top: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    }
+
+    .bio-text {
+      font-family: var(--serif);
+      font-size: clamp(22px, 2.8vw, 32px);
+      font-weight: 300; line-height: 1.4;
+    }
+
+    .bio-text em { font-style: italic; color: var(--accent); }
+    .bio-detail { font-size: 14px; color: var(--muted); line-height: 1.8; }
+    .bio-detail p + p { margin-top: 1em; }
+
+    /* lien "voir tout" */
+    .see-all {
+      display: flex; justify-content: flex-end; padding: 32px 40px 0;
+    }
+
+    .see-all-btn {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--accent);
+      border-bottom: 1px solid var(--accent); padding-bottom: 3px;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+
+    .see-all-btn:hover { opacity: 0.6; }
+
+    /* ══════════════════════════════════════════════
+       PAGE BIOGRAPHIE COMPLÈTE
+    ══════════════════════════════════════════════ */
+    .bio-page-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 80px;
+      align-items: start;
+      padding-top: 60px;
+      border-top: 1px solid var(--border);
+    }
+
+    .bio-page-lead {
+      font-family: var(--serif);
+      font-size: clamp(22px, 2.8vw, 34px);
+      font-weight: 300;
+      line-height: 1.35;
+      margin-bottom: 48px;
+    }
+
+    .bio-page-lead em { font-style: italic; color: var(--accent); }
+
+    .bio-page-body {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 640px;
+    }
+
+    .bio-page-body p + p { margin-top: 1.4em; }
+
+    .bio-page-body em { font-style: italic; color: rgba(232,228,223,0.7); }
+
+    /* Blocs thématiques */
+    .bio-block {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .bio-block-label {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .bio-block-title {
+      font-family: var(--serif);
+      font-size: clamp(20px, 2.5vw, 28px);
+      font-weight: 300; margin-bottom: 20px;
+    }
+
+    .bio-block-title em { font-style: italic; color: var(--accent); }
+
+    .bio-block-text { font-size: 14px; color: var(--muted); line-height: 1.9; }
+    .bio-block-text p + p { margin-top: 1em; }
+
+    /* Colonne droite : sidebar */
+    .bio-page-sidebar { position: sticky; top: calc(var(--nav-h) + 40px); }
+
+    .bio-photo-full {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      filter: grayscale(15%) brightness(0.88);
+      display: block;
+    }
+
+    /* Bloc "en bref" */
+    .bio-facts {
+      margin-top: 32px;
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+    }
+
+    .bio-facts-label {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+    }
+
+    .bio-fact {
+      display: grid; grid-template-columns: 100px 1fr;
+      gap: 12px; padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .bio-fact-key { color: var(--muted); }
+    .bio-fact-val { color: var(--text); }
+
+    .protected-email {
+      display: inline-block;
+      vertical-align: baseline;
+      font: inherit;
+      line-height: inherit;
+      letter-spacing: inherit;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .protected-email--bio {
+      color: var(--text);
+    }
+
+    .protected-email--footer {
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+      transition: border-color 0.2s;
+    }
+
+    .protected-email--footer:hover { border-color: var(--text); }
+
+    /* Liens presse / téléchargements */
+    .bio-downloads { margin-top: 32px; }
+
+    .bio-download-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+      font-size: 13px; cursor: pointer; transition: color 0.2s;
+    }
+
+    .bio-download-item:first-of-type { border-top: 1px solid var(--border); }
+
+    .bio-download-item:hover { color: var(--accent); }
+
+    .bio-download-label { color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* Sélection de prix / distinctions */
+    .bio-awards {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .bio-award-item {
+      display: grid; grid-template-columns: 60px 1fr;
+      gap: 24px; padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .bio-award-year { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.08em; }
+    .bio-award-title { font-family: var(--serif); font-size: 18px; font-weight: 300; }
+    .bio-award-detail { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+    /* ══════════════════════════════════════════════
+       WORKS GRID (accueil)
+    ══════════════════════════════════════════════ */
+    #works-home {
+      padding-left: 0; padding-right: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    #works-home .section-label { padding: 0 40px; }
+
+    .works-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+
+    .work-item {
+      position: relative; overflow: hidden; aspect-ratio: 4/5; cursor: pointer;
+    }
+
+    .work-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s ease, filter 0.4s ease;
+      filter: brightness(0.75) grayscale(15%);
+    }
+
+    .work-item:hover img { transform: scale(1.05); filter: brightness(0.5) grayscale(0%); }
+
+    .work-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 28px;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .work-arrow {
+      position: absolute; top: 20px; right: 20px;
+      font-size: 20px; color: var(--bg);
+      opacity: 0; transition: opacity 0.3s;
+    }
+
+    .work-item:hover .work-arrow { opacity: 1; }
+
+    .work-year { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; color: var(--bg); margin-bottom: 6px; }
+    .work-title { font-family: var(--serif); font-size: 30px; font-weight: 300; line-height: 1.2; color: var(--bg);}
+    .work-title em { font-style: italic; }
+
+    /* ══════════════════════════════════════════════
+       SOUNDCLOUD (accueil)
+    ══════════════════════════════════════════════ */
+    #ecouter { border-top: 1px solid var(--border); background: var(--surface); }
+
+    .sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+
+    .sc-text h2 {
+      font-family: var(--serif); font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 300; line-height: 1.2; margin-bottom: 20px;
+    }
+
+    .sc-text p { color: var(--muted); font-size: 14px; line-height: 1.8; max-width: 360px; }
+
+    .sc-link {
+      display: inline-flex; align-items: center; gap: 10px; margin-top: 28px;
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent);
+      border-bottom: 1px solid var(--accent); padding-bottom: 3px;
+      transition: opacity 0.2s; cursor: pointer;
+    }
+
+    .sc-link:hover { opacity: 0.7; }
+    .sc-player iframe { width: 100%; border-radius: 2px; filter: brightness(0.9); }
+
+    /* ══════════════════════════════════════════════
+       AGENDA aperçu (accueil)
+    ══════════════════════════════════════════════ */
+    #dates-home { border-top: 1px solid var(--border); }
+
+    .date-item {
+      display: grid; grid-template-columns: 140px 1fr auto;
+      gap: 40px; align-items: baseline;
+      padding: 24px 0; border-bottom: 1px solid var(--border);
+    }
+
+    .date-item:first-of-type { border-top: 1px solid var(--border); }
+    .date-date { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 0.05em; }
+    .date-title { font-family: var(--serif); font-size: 20px; font-weight: 300; }
+    .date-place { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+    .date-tag {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      border: 1px solid var(--border); padding: 4px 10px;
+      white-space: nowrap; align-self: center;
+    }
+
+    .date-item.past { opacity: 0.38; }
+
+    /* ══════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--border); padding: 60px 40px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: end;
+    }
+
+    .footer-name { font-family: var(--serif); font-size: 36px; font-weight: 300; line-height: 1; }
+    .footer-copy { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; margin-top: 40px; opacity: 0.5; }
+    .footer-contact { font-size: 13px; color: var(--muted); line-height: 2; }
+    .footer-contact a { color: var(--text); border-bottom: 1px solid var(--border); transition: border-color 0.2s; }
+    .footer-contact a:hover { border-color: var(--text); }
+
+    /* ══════════════════════════════════════════════
+       PAGE DÉTAIL ŒUVRE
+    ══════════════════════════════════════════════ */
+    .page-header {
+      padding: calc(var(--nav-h) + 40px) 40px 0;
+    }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted); cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover { color: var(--text); }
+
+    .work-detail-hero {
+      width: 100%; height: 60vh; min-height: 380px;
+      position: relative; overflow: hidden; margin-top: 32px;
+    }
+
+    .work-detail-hero img {
+      width: 100%; height: 100%; object-fit: cover; filter: brightness(0.55);
+    }
+
+    .work-detail-hero-fallback { position: absolute; inset: 0; background: linear-gradient(135deg, #1a1410, #0d0c0a); }
+
+    .work-detail-hero-meta {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 40px;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+    }
+
+    .work-detail-year { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; color: var(--bg); margin-bottom: 10px; }
+
+    .work-detail-title {
+      font-family: var(--serif); font-size: clamp(36px, 6vw, 72px); font-weight: 300; line-height: 1;
+    }
+
+    .work-detail-title em { font-style: italic; color: var(--bg); }
+
+    .work-detail-body {
+      padding: 80px 40px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+      border-top: 1px solid var(--border);
+    }
+
+    .work-detail-body.no-player {
+      grid-template-columns: 1fr;
+    }
+
+    .work-detail-description {
+      font-family: var(--serif); font-size: clamp(18px, 2.2vw, 24px);
+      font-weight: 300; line-height: 1.5; margin-bottom: 0px;
+    }
+
+    .work-detail-notes { font-size: 16px; color: var(--muted); line-height: 1.9; }
+    .work-detail-notes p + p { margin-top: 1em; }
+
+    .work-detail-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+
+    .work-detail-tag {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      border: 1px solid var(--border); padding: 5px 12px;
+    }
+
+    .work-detail-player-label {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .work-detail-player-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .work-detail-player iframe { width: 100%; border-radius: 2px; }
+
+    .work-detail-player-panel.hidden { display: none; }
+
+    .work-detail-nav {
+      display: flex; justify-content: space-between;
+      padding: 40px; border-top: 1px solid var(--border);
+    }
+
+    .work-nav-btn {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      cursor: pointer; transition: color 0.2s;
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .work-nav-btn:hover { color: var(--text); }
+    .work-nav-btn.hidden { visibility: hidden; pointer-events: none; }
+
+    /* ══════════════════════════════════════════════
+       PAGE CATALOGUE
+    ══════════════════════════════════════════════ */
+    .filters {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 60px; padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-btn {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted);
+      border: 1px solid var(--border); padding: 7px 16px;
+      cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s;
+      background: none;
+    }
+
+    .filter-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+    .filter-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(200,184,154,0.06); }
+
+    .catalogue-year-group { margin-bottom: 60px; }
+
+    .catalogue-year-heading {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent);
+      padding-bottom: 16px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 16px;
+    }
+
+    .catalogue-year-heading::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .catalogue-entry {
+      display: grid;
+      grid-template-columns: 56px 1fr 180px 80px;
+      gap: 24px; align-items: baseline;
+      padding: 20px 0; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background 0.15s;
+    }
+
+    .catalogue-entry:hover { background: rgba(255,255,255,0.015); }
+
+    .entry-month { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.08em; }
+    .entry-title { font-family: var(--serif); font-size: 20px; font-weight: 300; }
+    .entry-title em { font-style: italic; }
+    .entry-forces { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .entry-commissioned { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 3px; }
+    .entry-meta { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+
+    .entry-type {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      border: 1px solid var(--border); padding: 3px 8px; white-space: nowrap;
+    }
+
+    .entry-duration { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+    .entry-arrow {
+      font-family: var(--mono); font-size: 11px; color: var(--accent);
+      opacity: 0; transition: opacity 0.2s; align-self: center;
+    }
+
+    .catalogue-entry:hover .entry-arrow { opacity: 1; }
+
+    /* ══════════════════════════════════════════════
+       PAGE AGENDA
+    ══════════════════════════════════════════════ */
+    .agenda-upcoming-label {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--bg);
+      background: var(--accent); padding: 4px 10px;
+      display: inline-block; margin-bottom: 40px;
+    }
+
+    .agenda-year-heading {
+      font-family: var(--serif); font-size: clamp(36px, 5vw, 56px);
+      font-weight: 300; padding: 60px 0 0; margin-bottom: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .agenda-event {
+      display: grid; grid-template-columns: 160px 1fr;
+      gap: 40px; padding: 40px 0; border-bottom: 1px solid var(--border);
+    }
+
+    .agenda-event-date-main { font-family: var(--serif); font-size: 28px; font-weight: 300; line-height: 1; }
+
+    .agenda-type-badge {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+      text-transform: uppercase; padding: 4px 10px;
+      border: 1px solid var(--border); color: var(--muted); white-space: nowrap;
+    }
+
+    .agenda-type-badge.concert   { border-color: rgba(200,184,154,0.4); color: var(--accent); }
+    .agenda-type-badge.creation  { border-color: rgba(200,184,154,0.6); color: var(--accent); background: rgba(200,184,154,0.07); }
+    .agenda-type-badge.residence { border-color: rgb(150, 150, 255); color: rgb(53, 53, 94); background: rgba(159, 159, 255, 0.044) }
+    .agenda-type-badge.jury      { border-color: rgba(255,255,255,0.15); }
+    .agenda-type-badge.academie { border-color: rgba(58, 141, 73, 0.407); color: rgb(103, 157, 113); background: rgba(200,184,154,0.07); }
+
+    .agenda-event-type-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .agenda-event-venue { font-size: 13px; color: var(--muted); }
+    .agenda-event-piece { font-family: var(--serif); font-size: 22px; font-weight: 300; margin: 8px 0 6px; }
+    .agenda-event-piece em { font-style: italic; }
+    .agenda-event-piece-sub { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+    .agenda-event-note { font-size: 13px; color: var(--muted); font-style: italic; line-height: 1.7; }
+    .agenda-event-context { font-size: 13px; color: var(--muted); margin-top: 10px; }
+    .agenda-event-context strong { color: rgba(232,228,223,0.7); font-weight: 500; }
+    .agenda-event.past { opacity: 0.45; }
+
+    /* ══════════════════════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .catalogue-entry { grid-template-columns: 56px 1fr 120px 60px; gap: 16px; }
+      .bio-page-layout { grid-template-columns: 1fr 280px; gap: 48px; }
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      section { padding: 72px 24px; }
+      #works-home .section-label { padding: 0 24px; }
+      .see-all { padding: 24px 24px 0; }
+      #bio { grid-template-columns: 1fr; gap: 40px; }
+      .works-grid { grid-template-columns: 1fr 1fr; }
+      .sc-grid { grid-template-columns: 1fr; gap: 40px; }
+      .date-item { grid-template-columns: 100px 1fr; }
+      .date-tag { display: none; }
+      footer { grid-template-columns: 1fr; }
+      .work-detail-body { grid-template-columns: 1fr; gap: 40px; }
+      .catalogue-entry { grid-template-columns: 40px 1fr; }
+      .entry-meta, .entry-arrow { display: none; }
+      .agenda-event { grid-template-columns: 1fr; gap: 16px; }
+      .bio-page-layout { grid-template-columns: 1fr; }
+      .bio-page-sidebar { position: static; }
+      .bio-photo-full { aspect-ratio: 4/3; }
+    }
+
+    @media (max-width: 600px) {
+      .works-grid { grid-template-columns: 1fr; }
+      .hero-content { padding: 0 24px 48px; }
+      .nav-links { display: none; }
+      .work-detail-body { padding: 40px 24px; }
+      .work-detail-nav { padding: 24px; }
+      .page-header { padding: calc(var(--nav-h) + 24px) 24px 0; }
+    }
+
+    @media (min-width: 1600px) {
+      #bio {
+        width: min(100%, 1220px);
+        margin-inline: auto;
+      }
+
+      #works-home .works-grid {
+        width: min(100%, 1320px);
+        margin-inline: auto;
+      }
+
+      #dates-preview {
+        width: min(100%, 1040px);
+        margin-inline: auto;
+      }
+
+      #view-biographie section {
+        width: min(100%, 1220px);
+        margin-inline: auto;
+      }
+
+      .bio-page-layout {
+        width: 100%;
+      }
+
+      #view-catalogue section,
+      #view-agenda section {
+        width: min(100%, 1120px);
+        margin-inline: auto;
+      }
+
+      #agenda-list,
+      #catalogue-list {
+        width: 100%;
+      }
+
+      .work-detail-body,
+      .work-detail-nav {
+        width: min(100%, 1180px);
+        margin-inline: auto;
+      }
+
+      .sc-grid {
+        width: min(100%, 1120px);
+        margin-inline: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════
+       NAV
+  ══════════════════════════════════════════════ -->
+  <nav>
+    <span class="nav-name" data-nav="home">Alexandre Craman</span>
+    <ul class="nav-links">
+      <li><a data-nav="biographie">Biographie</a></li>
+      <li><a data-nav="catalogue">Catalogue</a></li>
+      <li><a data-nav="agenda">Agenda</a></li>
+      <li><a data-nav="home" data-anchor="ecouter">Écouter</a></li>
+      <li><a data-nav="home" data-anchor="contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════
+       VUE : ACCUEIL
+  ══════════════════════════════════════════════ -->
+  <div id="view-home" class="view active">
+
+    <section class="hero">
+      <div class="hero-bg-fallback"></div>
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <p class="hero-label">Musique électroacoustique</p>
+        <h1 class="hero-title">Alexandre<br><em>Craman</em></h1>
+      </div>
+      <div class="hero-scroll-indicator" aria-hidden="true">
+        <i class="hero-scroll-chevron"></i>
+        <span>Scroll</span>
+      </div>
+    </section>
+
+    <section id="bio">
+      <div>
+        <p class="section-label">Biographie</p>
+        <p class="bio-text reveal">
+Compositeur et artiste sonore basé en région lyonnaise, Alexandre Craman construit des espaces d'écoute à travers la composition électroacoustique, l'installation et le field recording. Son travail se tient à la lisière entre le familier et l'inquiet, entre la captation et la fiction.        </p>
+        <div class="see-all" style="padding: 32px 0 0; justify-content: flex-start;">
+          <span class="see-all-btn" data-nav="biographie">Biographie complète →</span>
+        </div>
+      </div>
+      <div>
+        <div class="bio-detail reveal">
+          <p>Alexandre Craman est compositeur électroacoustique et 
+            artiste sonore basé en région lyonnaise. Sa recherche artistique se concentre sur les
+            relations entre espace, perception et imaginaire sonore. 
+            Il étudie actuellement auprès de François Roux au 
+            Conservatoire National Supérieur de Musique et de Danse de Lyon, après 
+            des études de composition avec Arnaud Petit.</p>
+          <p>Le field recording, dans sa pratique, est moins une technique qu'une posture : celle de quelqu'un qui accepte de ne pas savoir ce qu'il cherche, et qui laisse le lieu décider. À travers la composition électroacoustique, l'installation sonore et la prise de son, il tisse une œuvre où le terrain n'est jamais un simple réservoir de matériaux, mais un interlocuteur à part entière, une présence qui oriente, déplace, recompose le projet initial. Ce que la composition organise à partir de là, c'est moins un discours qu'un territoire : un espace où l'écoute prend la forme d'une déambulation lente, attentive à l'infime et à ce qui se tient juste en deçà du perceptible.</p>
+          <p>Son travail a été présenté notamment au Goethe-Institut de Lyon et à l’Hexagone - 
+            scène nationale arts-sciences de Meylan. Il a été accueilli en résidence au Grame - 
+            CNCM (Lyon) et au CNCM Voce (Pigna). En 2026, il travaille auprès du compositeur 
+            Mauro Lanza dans le cadre de l’Académie ManiFeste de l’IRCAM.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="works-home">
+      <p class="section-label">Œuvres récentes</p>
+      <div class="works-grid" id="works-grid-home"></div>
+      <div class="see-all">
+        <span class="see-all-btn" data-nav="catalogue">Catalogue complet →</span>
+      </div>
+    </section>
+
+    <section id="ecouter">
+      <div class="sc-grid">
+        <div class="sc-text reveal">
+          <p class="section-label">Écouter</p>
+          <h2>Découvrez<br>mon univers sonore</h2>
+          <p>Une sélection de pièces disponibles en écoute libre.</p>
+          <a class="sc-link" href="https://soundcloud.com/alexandrecraman" target="_blank" rel="noopener">
+            Voir le profil complet →
+          </a>
+        </div>
+        <div class="sc-player reveal">
+          <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" 
+          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2295939992&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/alexandrecraman" title="Alexandre Craman" target="_blank" style="color: #cccccc; text-decoration: none;">Alexandre Craman</a> · <a href="https://soundcloud.com/alexandrecraman/a-hollow-opens-something" title="A Hollow opens, Something follows" target="_blank" style="color: #cccccc; text-decoration: none;">A Hollow opens, Something follows</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dates-home">
+      <p class="section-label">Prochaines dates</p>
+      <div id="dates-preview"></div>
+      <div class="see-all">
+        <span class="see-all-btn" data-nav="agenda">Agenda complet →</span>
+      </div>
+    </section>
+
+    <footer id="contact">
+    <div>
+      <p class="footer-name">Alexandre<br>Craman</p>
+      <p class="footer-copy">© 2025 — Alexandre Craman</p>
+    </div>
+    <div class="footer-contact">
+      <p>Contact</p>
+      <p><span class="protected-email protected-email--footer" id="footer-contact-email" aria-label="Adresse email"></span></p>
+      <br/>
+      <p>SoundCloud</p>
+      <p><a href="https://soundcloud.com/alexandrecraman" target="_blank" rel="noopener">soundcloud.com/alexandrecraman</a></p>
+      <br/>
+      <p>Instagram</p>
+      <p><a href="https://www.instagram.com/4.lxndr3/" target="_blank" rel="noopener">instagram.com/4.lxndr3</a></p>
+    </div>
+  </footer>
+ </div>
+  <!-- ══════════════════════════════════════════════
+       VUE : BIOGRAPHIE COMPLÈTE
+  ══════════════════════════════════════════════ -->
+  <div id="view-biographie" class="view">
+    <section style="padding-top: calc(var(--nav-h) + 60px);">
+
+      <h1 class="page-title"><em>Biographie</em></h1>
+
+      <div class="bio-page-layout">
+
+        <!-- ── Colonne texte ── -->
+        <div class="bio-page-main">
+
+          <!-- Texte d'accroche -->
+          <p class="bio-page-lead">
+Compositeur et artiste sonore basé en région lyonnaise, Alexandre Craman construit des espaces d'écoute à travers la composition électroacoustique, l'installation et le field recording. Son travail se tient à la lisière entre le familier et l'inquiet, entre la captation et la fiction.
+          </p>
+
+          <div class="bio-page-body">
+            <p>
+              Alexandre Craman est compositeur électroacoustique et artiste sonore 
+              basé en région lyonnaise. Sa recherche artistique se concentre sur les 
+              relations entre espace, perception et imaginaire sonore. 
+              Il étudie actuellement auprès de François Roux au Conservatoire 
+              National Supérieur de Musique et de Danse de Lyon, 
+              après des études de composition avec Arnaud Petit.
+            </p>
+            <p>Le field recording, dans sa pratique, est moins une technique qu'une posture : celle de quelqu'un qui accepte de ne pas savoir ce qu'il cherche, et qui laisse le lieu décider. À travers la composition électroacoustique, l'installation sonore et la prise de son, il tisse une œuvre où le terrain n'est jamais un simple réservoir de matériaux, mais un interlocuteur à part entière, une présence qui oriente, déplace, recompose le projet initial. Ce que la composition organise à partir de là, c'est moins un discours qu'un territoire : un espace où l'écoute prend la forme d'une déambulation lente, attentive à l'infime et à ce qui se tient juste en deçà du perceptible.</p>
+            <p>
+              Son travail a été présenté notamment au Goethe-Institut de Lyon et à l’Hexagone - 
+              scène nationale arts-sciences de Meylan. Il a été accueilli en résidence au Grame - 
+              CNCM (Lyon) et au CNCM Voce (Pigna). En 2026, il travaille auprès du compositeur 
+              Mauro Lanza dans le cadre de l’Académie ManiFeste de l’IRCAM
+            </p>
+          </div>
+
+          <!-- Bloc thématique : démarche -->
+          <div class="bio-block">
+            <p class="bio-block-label">Démarche artistique</p>
+            <h2 class="bio-block-title">Écouter comme on habite</h2>
+            <div class="bio-block-text">
+              <p>Il y a une façon d'entrer dans un lieu qui ne ressemble pas à une visite. On pose le micro, on attend, et quelque chose se met à exister qui n'existait pas encore tout à fait, ou plutôt qui existait sans témoin. Le field recording n'est pas une technique de captation, c'est une posture : celle de quelqu'un qui accepte de ne pas savoir ce qu'il cherche, et qui laisse le lieu décider.</p>
+              <p>C'est depuis cette posture que tout commence. Avant la composition, avant le studio, avant les choix formels, il y a la rencontre avec un endroit : un plateau de montagne à l'automne, une cabine de ferry par gros temps, un espace urbain dont les strates sonores se révèlent à qui prend le temps de s'immobiliser. Ces lieux ne sont pas des décors, mais sont des interlocuteurs. Ils ont une voix, une mémoire, une façon de répondre à la présence humaine qui les traverse. Ma pratique est, au fond, une tentative de rendre cette conversation audible.</p>
+              <p>Le territoire m'intéresse précisément parce qu'il résiste. Il ne se laisse pas réduire à un matériau docile. Lorsque j'arrive sur un lieu avec un projet, c'est souvent le lieu qui finit par imposer les siens. La session ratée devient la pièce. L'enregistrement involontaire contient plus que ce qu'on espérait capter. Ce qu'on croyait être du bruit de fond s'avère être le cœur du sujet. Apprendre à composer, c'est peut-être d'abord apprendre à reconnaître ce moment où le terrain prend le dessus et à lui faire confiance.</p>
+              <p>La rencontre est au centre de tout. Rencontre avec les lieux, mais aussi avec ce qui les peuple : les corps qui passent, les animaux qui reprennent possession de la nuit, les objets dont la vibration recèle une complexité que personne n'avait pensé à écouter. Ces rencontres ne sont jamais neutres. Elles laissent une empreinte dans le matériau sonore, mais aussi dans la façon dont on pense l'espace, la durée, la présence. La composition électroacoustique devient alors le lieu où ces empreintes sont traitées, interrogées, mises en tension les unes avec les autres.</p>
+              <p>Ce qui m'attire dans le sonore, c'est précisément ce qu'il ne montre pas. Un enregistrement ne documente pas un lieu,  il en garde le fantôme. Une pièce acousmatique ne représente pas un espace, elle en construit un autre, invisible, habitable par l'écoute seule. Entre ces deux espaces (celui qu'on a traversé et celui qu'on donne à traverser), il existe un écart que je ne cherche pas à combler, car c’est là que travaille la composition.</p>
+              <p>Je conçois mes œuvres comme des invitations à une forme d'attention inhabituelle,  non pas vers le spectaculaire ou l'inouï, mais vers ce qui se tient juste en deçà du perceptible : le frémissement de l'infime, la densité du silence entre deux sons, la façon dont un espace change de nature à la tombée du jour. Cette attention est, je crois, une forme de présence au monde. Et la musique, dans ce cadre, n'est pas une fin mais une façon d'y revenir.</p>
+            </div>
+          </div>
+
+          <!-- Bloc thématique : formation -->
+          <div class="bio-block">
+            <p class="bio-block-label">Formation</p>
+            <h2 class="bio-block-title"><em>Parcours</em></h2>
+            <div class="bio-block-text">
+              <p>2026 —       Académie Manifeste, IRCAM, Paris</p>
+              <p>2024—2027 —  DNSPM composition électroacoustique, CNSMD de Lyon</p>
+              <p>2024 —       DEM de composition, CRR de Grenoble</p>
+              <p>2020-2022 —  Doctorant, PRISM-CNRS, Marseille</p>
+              <p>2019 —       Master en acoustique et musicologie, Aix-Marseille Université, Marseille</p>
+            </div>
+          </div>
+
+          <!-- Prix et distinctions -->
+          <div class="bio-awards" id="bio-awards-list">
+            <!-- Généré par JS depuis BIO.awards -->
+          </div>
+
+        </div>
+
+        <!-- ── Colonne sidebar ── -->
+        <div class="bio-page-sidebar">
+
+          <!-- Photo -->
+          <!-- Remplacez par votre photo -->
+          <img class="bio-photo-full" src="images/portrait.jpg"
+               alt="Portrait de Alexandre Craman"
+               onerror="this.style.display='none'" />
+
+          <!-- En bref -->
+          <div class="bio-facts" id="bio-facts-list">
+            <!-- Généré par JS depuis BIO.facts -->
+          </div>
+
+          <!-- Téléchargements / presse -->
+          <div class="bio-downloads" id="bio-downloads-list">
+            <!-- Généré par JS depuis BIO.downloads -->
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       VUE : DÉTAIL ŒUVRE
+  ══════════════════════════════════════════════ -->
+  <div id="view-work" class="view">
+    <div class="page-header">
+      <div class="back-btn" id="back-from-work">← Toutes les œuvres</div>
+    </div>
+
+    <div class="work-detail-hero">
+      <div class="work-detail-hero-fallback"></div>
+      <img id="detail-img" src="" alt="" onerror="this.style.opacity='0.5'" />
+      <div class="work-detail-hero-meta">
+        <p class="work-detail-year" id="detail-year"></p>
+        <h1 class="work-detail-title" id="detail-title"></h1>
+      </div>
+    </div>
+
+    <div class="work-detail-body" id="detail-player-body">
+      <div>
+        <p class="work-detail-description" id="detail-description"></p>
+        <div class="work-detail-notes" id="detail-notes"></div>
+        <div class="work-detail-tags" id="detail-tags"></div>
+      </div>
+      <div class="work-detail-player-panel" id="detail-player-panel">
+        <p class="work-detail-player-label">Écouter</p>
+        <div id="detail-player"></div>
+      </div>
+    </div>
+
+    <div class="work-detail-nav">
+      <div class="work-nav-btn hidden" id="btn-prev">← Précédente</div>
+      <div class="work-nav-btn hidden" id="btn-next">Suivante →</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       VUE : CATALOGUE
+  ══════════════════════════════════════════════ -->
+  <div id="view-catalogue" class="view">
+    <section style="padding-top: calc(var(--nav-h) + 60px);">
+      <h1 class="page-title">Catalogue<br><em>des œuvres</em></h1>
+      <p class="page-intro">
+        Une sélection de compositions, classées par année. </br>
+        Cliquez sur une entrée pour accéder à la fiche complète et à l'écoute.
+      </p>
+      <div class="filters" id="catalogue-filters"></div>
+      <div id="catalogue-list"></div>
+    </section>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       VUE : AGENDA
+  ══════════════════════════════════════════════ -->
+  <div id="view-agenda" class="view">
+    <section style="padding-top: calc(var(--nav-h) + 60px);">
+      <h1 class="page-title"><em>Agenda</em></h1>
+      <p class="page-intro">Concerts, résidences, académies et événements — à venir et passés.</p>
+      <div id="agenda-list"></div>
+    </section>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       DONNÉES — modifiez uniquement cette section
+  ══════════════════════════════════════════════ -->
+  <script>
+
+  /* ─────────────────────────────────────────────────
+     BIO — données de la page biographie
+  ───────────────────────────────────────────────── */
+  const BIO = {
+
+    /* Informations factuelles affichées dans la sidebar */
+    facts: [
+      { key: "Né en",        val: "1995" },
+      { key: "Basé à",       val: "Lyon, France" },
+      { key: "Formation",    val: "CNSMD de Lyon" },
+      { key: "Spécialités",   val: "Musique électroacoustique, art sonore" },
+      { key: "Contact",      val: "" }
+    ],
+
+    /* Prix et distinctions (affiché en bas de la colonne texte) */
+    awards: [
+      /*{ year: "2023", title: "[Nom du prix ou distinction]", detail: "[Contexte, institution]" }, */
+      /*{ year: "2022", title: "[Autre prix ou sélection]",    detail: "[Contexte]" } */
+      /* Ajoutez vos distinctions ici */
+    ],
+
+    /* Fichiers téléchargeables (biographie presse, photo HD…)
+       href → chemin vers le fichier dans votre repo (ex: docs/bio-presse.pdf) */
+    downloads: [
+      /*{ label: "PDF",  title: "Biographie courte (presse)",  href: "docs/bio-presse.pdf" },*/
+      /*{ label: "PDF",  title: "Biographie longue",           href: "docs/bio-longue.pdf" },*/
+      /*{ label: "JPG",  title: "Photo presse HD",             href: "images/portrait-hd.jpg" }*/
+      /* Commentez les lignes si vous n'avez pas encore les fichiers */
+    ]
+  };
+
+  /* ─────────────────────────────────────────────────
+     WORKS — catalogue
+  ───────────────────────────────────────────────── */
+  const WORKS = [
+    {
+      id:          "A hollow opens, Something follows",
+      year:        2026,
+      month:       "01",
+      title:       "<em>A hollow opens, Something follows</em>",
+      forces:      "Stéréo",
+      duration:    "12'30",
+      type:        "Acousmatique",
+      commissioned:"",
+      image:       "images/work1.jpg",
+      notes:       `<p>Il y a des seuils qu'on franchit sans savoir ce qu'on laisse derrière ni ce qui nous attend de l'autre côté. Une porte s'ouvre, ou plutôt, quelque chose en nous s'ouvre: une faille, un espace creux qui appelle. Et dans cet appel, dans ce vide qui se déploie, quelque chose répond. Quelque chose suit. C'est la loi des espaces liminaux, des lieux abandonnés, des portes qu'on pousse : on n'entre jamais seul.</p>
+                    <p>Cette pièce explore les interstices entre l'animé et l'inanimé, entre la voix et le silence, entre ce qui garde et ce qui est gardé. Les armures y respirent comme des corps absents, l'orgue résonne depuis un ailleurs inaccessible, la forêt nocturne devient chambre d'écho pour des présences qui ne devraient pas être là. Le monstre n'est peut-être que le son de notre propre passage dans des lieux qui nous précèdent et nous survivront.</p>`,
+      tags:        ["Acousmatique"],
+      soundcloud:  "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2295939992&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+      featured:    true
+    },
+    {
+      id:          "ExVoto",
+      year:        2025,
+      month:       "01",
+      title:       "<em>ExVoto</em>",
+      forces:      "Stéréo",
+      duration:    "6'",
+      type:        "Acousmatique",
+      commissioned:"",
+      image:       "images/work2.jpg",
+      notes:       `<p>“Je regardai, et voici, il vint du septentrion un vent impétueux, une grosse nuée, et une
+gerbe de feu, qui répandait de tous côtés une lumière éclatante, au centre de laquelle brillait
+comme de l'airain poli, sortant du milieu du feu. Au centre encore, apparaissent quatre
+animaux, dont l'aspect avait une ressemblance humaine. Chacun d'eux avait quatre faces,
+et chacun avait quatre ailes. Leurs pieds étaient droits, et la plante de leurs pieds était
+comme celle du pied d'un veau, ils étincelaient comme de l'airain poli. Ils avaient des mains
+d'homme sous les ailes à leurs quatre côtés; et tous les quatre avaient leurs faces et leurs
+ailes. Leurs ailes étaient jointes l'une à l'autre; ils ne se tournaient point en marchant, mais
+chacun marchait droit devant soi. Quant à la figure de leurs faces, ils avaient tous une face
+d'homme, tous quatre une face de lion à droite, tous quatre une face de bœuf à gauche, et
+tous quatre une face d'aigle. Leurs faces et leurs ailes étaient séparées par le haut; deux de
+leurs ailes étaient jointes l'une à l'autre, et deux couvraient leurs corps. Chacun marchait
+droit devant soi; ils allaient où l'esprit les poussait à aller, et ils ne se tournaient point dans
+leur marche. L'aspect de ces animaux ressemblait à des charbons de feu ardents, c'était
+comme l'aspect des flambeaux, et ce feu circulait entre les animaux; il jetait une lumière
+éclatante, et il en sortait des éclairs. Et les animaux couraient et revenaient comme la
+foudre.”</p>
+<p>Ezéchiel 1:4-14</p>`,
+      tags:        ["Acousmatique"],
+      soundcloud:  "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2237867564&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+      featured:    true
+    },
+    {
+      id:          "Révélation",
+      year:        2024,
+      month:       "05",
+      title:       "<em>Révélation</em>",
+      forces:      "Stéréo",
+      duration:    "4'",
+      type:        "Acousmatique",
+      commissioned:"",
+      image:       "images/work3.jpg",
+      notes:       `<p>Tout matériau sonore porte en lui une mémoire qu'il n'a pas encore tout à fait accepté de livrer. Quelque chose sommeille dans sa structure, une identité qui précède le geste du compositeur, qui lui résiste, qui l'attend.</p>
+      <p>Cette pièce est née d'une capitulation: reconnaître que la matière impose ses propres conditions, que le vouloir-dire du compositeur est en l'occurrence moins urgent que le vouloir-être du son lui-même. Il a fallu s'effacer, laisser l'organicité de l'échantillon s'étirer dans le temps, se déplier selon sa propre logique, révéler par degrés ce qu'il contenait déjà.</p>
+      <p>La pièce avance comme une lente mise au point. Ce qui d'abord semble paysage, texture, matière indéterminée, se resserre progressivement autour d'un centre de gravité que l'on ne devine pas. L'écoute est recadrée de l'intérieur. Ce n'est pas une surprise, c'est une reconnaissance : le sentiment d'avoir entendu, depuis le début, quelque chose que l'on n'était pas encore prêt à nommer.</p>`,
+      tags:        ["Acousmatique"],
+      soundcloud:  "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2052684964&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+      featured:    true
+    },
+    {
+      id:          "La traversée",
+      year:        2024,
+      month:       "01",
+      title:       "<em>La traversée</em>",
+      forces:      "Stéréo",
+      duration:    "5'30",
+      type:        "Acousmatique",
+      commissioned:"",
+      image:       "images/latraversee.jpg",
+      notes:       `<p>Il y a des nuits où la mer ne laisse pas dormir. Non pas par le bruit, mais par ce qu'elle laisse entendre entre les bruits : le sifflement des installations électriques, le battement sourd de la coque contre l'eau noire, la chaleur close d'une cabine trop petite pour contenir l'angoisse qui s'y accumule. Cette nuit-là, entre Bastia et Marseille, quelque chose s'est ouvert.</p>
+      <p> Cette pièce est née de cette insomnie. D'un corps éveillé dans l'obscurité, les yeux fixés sur le ballet des lumières à la surface de l'eau déchaînée. Lumières froides, lumières animales, comme si les profondeurs envoyaient des signaux depuis un endroit que la conscience ne peut pas tout à fait atteindre.</p>
+<p> J'ai voulu descendre plus bas encore, dans des abysses fictifs, hallucinés, lovecraftiens, là où la pression devient une texture, et l'obscurité une matière. Les objets sonores y évoluent en chorégraphies lentes et étranges, bioluminescents, organiques, portés par une cinétique qui suspend le temps et défait le poids des choses. Le son y est traité comme une chair : modelé, comprimé, étiré jusqu'à ce qu'il respire (ou cesse de respirer).</p>
+<p> La voix traverse la pièce comme un corps qui se noie à petit feu. Le texte, tiré de “Vingt mille lieues sous les mers” de Jules Verne, est déconstruit, répété, fragmenté jusqu'à ce que le sens se dissolve dans quelque chose de plus opaque, de plus inquiet. Ce qui reste, ce ne sont plus des mots : c'est la sensation d'un récit qui échappe à celui qui le tient. </p>`,
+      tags:        ["Acousmatique"],
+      soundcloud:  "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2052814472&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+      featured:    false
+    },
+    {
+      id:          "Anthropocène",
+      year:        2023,
+      month:       "11",
+      title:       "<em>Anthropocène</em>",
+      forces:      "Stéréo",
+      duration:    "7'10",
+      type:        "Acousmatique",
+      commissioned:"",
+      image:       "images/anthropocene.jpg",
+      notes:       `<p></p> 
+      <p>Anthropocène est une déambulation sonore qui plonge l'auditeur dans un univers interrogeant les relations complexes qui se tissent entre l'Homme, la nature et la technologie. Ce terme, popularisé par le prix Nobel de chimie Paul J. Crutzen, désigne une nouvelle ère géologique dans laquelle l’activité humaine est devenue la force géologique principale, surpassant ainsi toutes les autres forces géologiques et naturelles qui avaient été influentes jusqu'à présent. 
+</p> 
+      <p>Conçue à partir d'enregistrements de terrain, cette œuvre se déploie comme un voyage dans un paysage sonore composé, où les frontières entre sons naturels et artificiels s'estompent pour mieux questionner notre perception de nos environnements. 
+Cette pièce est née du constat de l’omniprésence des sons produits par l’activité humaine dans l’espace sonore, y compris dans des lieux extrêmement isolés. Que ce soit à travers le bruit d’un avion dans le ciel, d’une automobile sur une route de montagne ou le bourdonnement sourd d’une ville lointaine, nos sociétés impactent de manière profonde des lieux que nous serions tentés de qualifier de “naturels”. Ce phénomène a une influence très marquée sur le comportement de la faune et participe à façonner les écosystèmes qui nous entourent. Plutôt que de simplement dénoncer cette “pollution sonore”, j’ai voulu porter une réflexion autour de l’idée d’une nature anthropocentrée.
+</p>
+      <p>En plaçant l’auditeur au centre de la narration, cette œuvre propose l’expérience sensible d’une réalité écologique. Elle se veut être une invitation à la réflexion, un espace pour remettre en jeu nos perceptions.
+
+</p>`,
+      tags:        ["Acousmatique"],
+      soundcloud:  "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2052683552&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
+      featured:    false
+    },
+    {
+      id:          "Dérush",
+      year:        2023,
+      month:       "10",
+      title:       "<em>Dérush//Le brame du cerf</em>",
+      forces:      "Stéréo",
+      duration:    "3'",
+      type:        "Acousmatique",
+      commissioned:"",
+      image:       "images/derush.jpg",
+      notes:       `<p>Certains lieux tolèrent notre présence sans jamais vraiment nous accueillir. On y entre avec un projet, une intention, un appareillage, et la nuit finit par révéler ce qu'on n'avait pas su voir de jour : qu'on est l'intrus.</p>
+      <p>Le plateau s'est refermé sur lui-même à la tombée du jour, et c'est dans cet intervalle, entre le départ des derniers marcheurs et l'obscurité complète, qu'a eu lieu quelque chose d'irréductible : la nature reprenant possession d'un espace que nous n'avions fait que traverser. Ce que cette pièce garde, c'est la trace d'un glissement, d'une écoute orientée vers une écoute offerte, d'un objectif vers une ouverture.</p>
+      <p>Le montage ne cherche pas à ordonner. Il tient deux temps ensemble sans les réconcilier : une temporalité lisse, celle du lieu qui respire, et une temporalité striée, hachée, celle de la présence humaine avec sa rythmicité discontinue, ses irruptions. L'une contient l'autre, l'une dérange l'autre.</p>`,
+      tags:        ["Acousmatique"],
+      featured:    false
+    },
+       {
+      id:          "Life from the Loam",
+      year:        2023,
+      month:       "06",
+      title:       "<em>Life from the Loam</em>",
+      forces:      "Electronique live, violon et objets, pour deux interprètes",
+      duration:    "8'10",
+      type:        "Electronique live",
+      commissioned:"",
+      image:       "images/lftl.jpg",
+      notes:       `<p><em>Life from the loam</em> naît de la conviction que le son ordinaire recèle une complexité que l'instrument, dans sa noblesse codifiée, tend parfois à recouvrir. Ici, l'objet quotidien est traité non pas comme métaphore mais comme matière première : ce qui vibre, frémit, frotte ou tient dans la paume d'une main devient le site d'une investigation. L'archet rencontre ce que la lutherie n'a jamais prévu.</p>
+      <p>Le violon et l'électronique n'illustrent pas. Ils s'interrogent, chacun tendant vers l'autre, dans une proposition à laquelle l'autre répond, dévie, absorbe. Ce qui se tisse entre eux n'est ni fusion ni opposition, mais quelque chose de plus instable : un entre-deux où les origines des sons finissent par se brouiller. Il existe une échelle d'écoute en deçà de laquelle la musique cesse d'être musique pour devenir autre chose, plus dense, plus réelle, plus troublante. Pas le silence, mais son exact contraire : le monde dans son fourmillement continu, ses frictions, ses résonances accidentelles.</p>
+      <p><em>Loam</em>, le terreau, est cette terre grasse, vivante, qui tient tout ensemble sans que rien n'y soit fixe. C'est de là que vient cette pièce : non pas d'une idée, mais d'une attention prolongée à ce qui prolifère dans l'infime.
+
+
+      `,
+      tags:        ["Electronique live"],
+      featured:    false
+    },
+  ];
+
+  /* ─────────────────────────────────────────────────
+     EVENTS — agenda
+  ───────────────────────────────────────────────── */
+  const EVENTS = [
+    {
+      date: "23 mai 2026", dateSort: "2026-04-23",
+      type: "creation", venue: "Chapelle de la Trinité", city: "Lyon", country: "France",
+      piece: "<em>Saône</em>", pieceSub: "Pièce acousmatique stéréo", context: "dans le cadre de la journée 'ÉCOLOGIE SONORE EN CIRCUIT COURT' organisée par le GRAME",
+      note: "Oeuvre composée à partir d'enregistrements de terrain réalisés sur les bords de Saône entre Fontaines-sur-Saône et Collonges-au-Mont-d'Or", past: false
+    },
+    {
+      date: "27 juin 2026", dateSort: "2026-06-27",
+      type: "creation", venue: "Espace de projection - IRCAM", city: "Paris", country: "France",
+      piece: "Nouvelle pièce", pieceSub: "Pour 8 hauts-parleurs", 
+      note: "Dans le cadre de l'académie Manifeste", past: false
+    },
+    {
+      date: "26 février 2026", dateSort: "2026-02-16",
+      type: "concert", venue: "Planétarium de St-Etienne", city: "St-Etienne", country: "France",
+      piece: "Concert au planétarium de St-Etienne", pieceSub: "Diffusion de ma pièce <em>A hollow opens, Something follows</em>", note: "",
+      past: true
+    },
+    {
+      date: "20 juin 2025", dateSort: "2025-06-20",
+      type: "concert", venue: "Goethe Institute", city: "Lyon", country: "France",
+      piece: "<em>HelloWorld!</em>", pieceSub: "Performance électronique live",
+      note: "", context: "", past: true
+    },
+    {
+      date: "du 2 au 5 juin 2025", dateSort: "2025-06-05",
+      type: "residence", venue: "GRAME", city: "Lyon", country: "France",
+      piece: "<em>Résidence de création</em>", pieceSub: "Projet HelloWorld!, performance électronique live",
+      note: "", context: "", past: true
+    },
+    {
+      date: "16 janvier 2026", dateSort: "2026-01-16",
+      type: "creation", venue: "Salle Varèse - CNSMD de Lyon", city: "Lyon", country: "France",
+      piece: "<em>A hollow opens, Something follows</em>", pieceSub: "Pièce acousmatique stéréo",
+      note: "Dans le cadre du festival Empreintes 2026", context: "", past: true
+    },
+    {
+      date: "14 janvier 2025", dateSort: "2025-01-14",
+      type: "creation", venue: "Salle Varèse - CNSMD de Lyon", city: "Lyon", country: "France",
+      piece: "<em>ExVoto</em>", pieceSub: "Pièce acousmatique stéréo",
+      note: "Dans le cadre du festival Empreintes 2025", context: "", past: true
+    },
+    {
+      date: "19 octobre 2024", dateSort: "2024-10-19",
+      type: "concert", venue: "L'Hexagone Scène nationale", city: "Meylan", country: "France",
+      piece: "<em>Concert du programme Diakena</em>", pieceSub: "",
+      note: "Sortie de résidence du programme Diakena", context: "pièces diffusées: <em>Dérush//Le brame du cerf, La traversée, Anthropocène, Révélation", past: true
+    },
+    {
+      date: "Du 15 au 27 juin 2026", dateSort: "2026-06-15",
+      type: "academie", venue: "IRCAM", city: "Paris", country: "France",
+      piece: "<em>Académie Manifeste</em>", pieceSub: "",
+      note: "Programme in-situ composition électronique", context: "", past: false
+    },
+    {
+      date: "juin 2021", dateSort: "2021-06-01",
+      type: "residence", venue: "VOCE cncm", city: "Pigna (Corse)", country: "France",
+      piece: "<em>Résidence de recherche et création</em>", pieceSub: "",
+      note: "Projet Play Corsican Moods, associant artistes, chercheurs et doctorants de l'Université d'Aix-Marseille", context: "", past: true
+    },
+  ]; 
+
+  /* ══════════════════════════════════════════════
+     MOTEUR — ne pas modifier ci-dessous
+  ══════════════════════════════════════════════ */
+  let currentWorkIdx = 0;
+  let currentView    = 'home';
+  let previousView   = 'home';
+  let currentFilter  = 'Tout';
+  const EMAIL_PART_EVEN = [75, 79, 75, 80, 79, 77, 75, 75, 108, 94, 96, 74, 75, 72, 77, 71];
+  const EMAIL_PART_ODD  = [42, 54, 44, 64, 108, 64, 41, 44, 62, 43, 43, 41, 37, 108, 43];
+  const EMAIL_KEY_EVEN = 41;
+  const EMAIL_KEY_ODD  = 73;
+  const navEl = document.querySelector('nav');
+  const workDetailHeroEl = document.querySelector('.work-detail-hero');
+
+  function decodeProtectedEmail() {
+    let evenIdx = 0;
+    let oddIdx = 0;
+    let out = '';
+
+    for (let i = 0; i < 31; i++) {
+      if (i % 2 === 0) {
+        out += String.fromCharCode((EMAIL_PART_EVEN[evenIdx++] - 3) ^ EMAIL_KEY_EVEN);
+      } else {
+        out += String.fromCharCode((EMAIL_PART_ODD[oddIdx++] - 5) ^ EMAIL_KEY_ODD);
+      }
+    }
+
+    return out;
+  }
+
+  function renderProtectedEmail(targetEl) {
+    if (!targetEl) return;
+    const email = decodeProtectedEmail();
+    targetEl.textContent = email;
+  }
+
+  function isNavOverElement(el) {
+    if (!el) return false;
+    const navHeight = navEl.offsetHeight;
+    const rect = el.getBoundingClientRect();
+    return rect.top < navHeight && rect.bottom > 0;
+  }
+
+  function updateNavTone() {
+    const onWorkHero = currentView === 'work' && isNavOverElement(workDetailHeroEl);
+    navEl.classList.toggle('on-work-hero', onWorkHero);
+
+    const homeView = document.getElementById('view-home');
+    const homeIsActive = homeView && homeView.classList.contains('active');
+
+    if (!homeIsActive) {
+      navEl.classList.remove('on-hero');
+      return;
+    }
+
+    const hero = homeView.querySelector('.hero');
+    if (!hero) {
+      navEl.classList.remove('on-hero');
+      return;
+    }
+
+    const navOverHero = isNavOverElement(hero);
+    navEl.classList.toggle('on-hero', navOverHero);
+  }
+
+  // ── Routing ──────────────────────────────────
+  function showView(view, anchor) {
+    previousView = currentView;
+    currentView  = view;
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    history.pushState({ view }, '', '#' + view);
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.toggle('active', a.dataset.nav === view && !a.dataset.anchor);
+    });
+    updateNavTone();
+    if (anchor) {
+      setTimeout(() => {
+        const el = document.getElementById(anchor);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  function routeFromHash(hash) {
+    if (!hash || hash === 'home')         { showView('home');        return; }
+    if (hash === 'biographie')            { showView('biographie');  return; }
+    if (hash === 'catalogue')             { showView('catalogue');   return; }
+    if (hash === 'agenda')                { showView('agenda');      return; }
+    const m = hash.match(/^work\/(.+)$/);
+    if (m) {
+      const workId = decodeURIComponent(m[1]);
+      openWork(workId);
+      return;
+    }
+    showView('home');
+  }
+
+  window.addEventListener('popstate', () => routeFromHash(window.location.hash.slice(1)));
+
+  // ── Fiche œuvre ──────────────────────────────
+  function openWork(id) {
+    const idx = WORKS.findIndex(w => w.id === id);
+    if (idx === -1) return;
+    currentWorkIdx = idx;
+    const w = WORKS[idx];
+
+    document.getElementById('detail-year').textContent        = w.year;
+    document.getElementById('detail-title').innerHTML         = w.title;
+    document.getElementById('detail-img').src                 = w.image;
+    document.getElementById('detail-img').alt                 = w.title.replace(/<[^>]+>/g, '');
+    document.getElementById('detail-description').textContent = w.description;
+    document.getElementById('detail-notes').innerHTML         = w.notes;
+    document.getElementById('detail-tags').innerHTML          = w.tags.map(t => `<span class="work-detail-tag">${t}</span>`).join('');
+    const playerBody  = document.getElementById('detail-player-body');
+    const playerPanel = document.getElementById('detail-player-panel');
+    const hasSoundcloud = typeof w.soundcloud === 'string' && w.soundcloud.trim().length > 0;
+    if (hasSoundcloud) {
+      playerBody.classList.remove('no-player');
+      playerPanel.classList.remove('hidden');
+      document.getElementById('detail-player').innerHTML = `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="${w.soundcloud}"></iframe>`;
+    } else {
+      playerBody.classList.add('no-player');
+      playerPanel.classList.add('hidden');
+      document.getElementById('detail-player').innerHTML = '';
+    }
+
+    document.getElementById('btn-prev').classList.toggle('hidden', idx === 0);
+    document.getElementById('btn-next').classList.toggle('hidden', idx === WORKS.length - 1);
+
+    previousView = currentView;
+    currentView  = 'work';
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-work').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    updateNavTone();
+    history.pushState({ view: 'work', param: id }, '', '#work/' + encodeURIComponent(id));
+  }
+
+  // ── Biographie ────────────────────────────────
+  function renderBio() {
+    // Faits
+    document.getElementById('bio-facts-list').innerHTML = `
+      <p class="bio-facts-label">En bref</p>
+      ${BIO.facts.map(f => `
+        <div class="bio-fact">
+          <span class="bio-fact-key">${f.key}</span>
+          <span class="bio-fact-val">${f.key === 'Contact' ? '<span class="protected-email protected-email--bio" data-protected-email="bio" aria-label="Adresse email"></span>' : f.val}</span>
+        </div>
+      `).join('')}
+    `;
+
+    document.querySelectorAll('[data-protected-email="bio"]').forEach(renderProtectedEmail);
+
+    // Téléchargements
+    if (BIO.downloads.length) {
+      document.getElementById('bio-downloads-list').innerHTML = `
+        <p class="bio-facts-label" style="margin-top:32px; padding-top:28px; border-top:1px solid var(--border);">Presse &amp; téléchargements</p>
+        ${BIO.downloads.map(d => `
+          <a class="bio-download-item" href="${d.href}" target="_blank" rel="noopener" download>
+            <span>${d.title}</span>
+            <span class="bio-download-label">${d.label} ↓</span>
+          </a>
+        `).join('')}
+      `;
+    }
+
+    // Prix
+    if (BIO.awards.length) {
+      document.getElementById('bio-awards-list').innerHTML = `
+        <p class="bio-block-label">Prix &amp; distinctions</p>
+        ${BIO.awards.map(a => `
+          <div class="bio-award-item">
+            <p class="bio-award-year">${a.year}</p>
+            <div>
+              <p class="bio-award-title">${a.title}</p>
+              <p class="bio-award-detail">${a.detail}</p>
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+  }
+
+  // ── Grille accueil ────────────────────────────
+  function renderHomeGrid() {
+    const featured = WORKS.filter(w => w.featured).slice(0, 6);
+    const grid = document.getElementById('works-grid-home');
+    grid.innerHTML = featured.map(w => `
+      <div class="work-item reveal" data-work-id="${w.id}">
+        <img src="${w.image}" alt="${w.title.replace(/<[^>]+>/g,'')}" onerror="this.style.opacity='0'" />
+        <span class="work-arrow">↗</span>
+        <div class="work-overlay">
+          <p class="work-year">${w.year}</p>
+          <p class="work-title">${w.title}</p>
+        </div>
+      </div>
+    `).join('');
+    grid.addEventListener('click', e => {
+      const item = e.target.closest('[data-work-id]');
+      if (item) openWork(item.dataset.workId);
+    });
+    observeReveal();
+  }
+
+  // ── Aperçu agenda accueil ─────────────────────
+  function renderDatesPreview() {
+    const upcoming = EVENTS
+      .filter(e => !e.past)
+      .sort((a, b) => a.dateSort.localeCompare(b.dateSort))
+      .slice(0, 4);
+
+    document.getElementById('dates-preview').innerHTML = upcoming.map(ev => `
+      <div class="date-item">
+        <p class="date-date">${ev.date}</p>
+        <div>
+          <p class="date-title">${ev.piece}</p>
+          <p class="date-place">${ev.venue} — ${ev.city}</p>
+        </div>
+        <p class="date-tag">${capitalize(ev.type)}</p>
+      </div>
+    `).join('');
+    observeReveal();
+  }
+
+  // ── Catalogue ─────────────────────────────────
+  function renderCatalogue(filter) {
+    currentFilter = filter || 'Tout';
+    const types = ['Tout', ...new Set(WORKS.map(w => w.type))];
+
+    document.getElementById('catalogue-filters').innerHTML = types.map(t => `
+      <button class="filter-btn${t === currentFilter ? ' active' : ''}" data-filter="${t}">${t}</button>
+    `).join('');
+
+    document.getElementById('catalogue-filters').addEventListener('click', e => {
+      const btn = e.target.closest('[data-filter]');
+      if (btn) renderCatalogue(btn.dataset.filter);
+    });
+
+    const filtered = currentFilter === 'Tout' ? WORKS : WORKS.filter(w => w.type === currentFilter);
+    const byYear = {};
+    filtered.forEach(w => { if (!byYear[w.year]) byYear[w.year] = []; byYear[w.year].push(w); });
+    const years = Object.keys(byYear).sort((a, b) => b - a);
+
+    document.getElementById('catalogue-list').innerHTML = years.map(yr => `
+      <div class="catalogue-year-group">
+        <p class="catalogue-year-heading">${yr}</p>
+        ${byYear[yr].sort((a, b) => b.month.localeCompare(a.month)).map(w => `
+          <div class="catalogue-entry" data-work-id="${w.id}">
+            <p class="entry-month">${w.month}</p>
+            <div>
+              <p class="entry-title">${w.title}</p>
+              <p class="entry-forces">${w.forces}${w.duration ? ' — ' + w.duration : ''}</p>
+              ${w.commissioned ? `<p class="entry-commissioned">Commande : ${w.commissioned}</p>` : ''}
+            </div>
+            <div class="entry-meta">
+              <span class="entry-type">${w.type}</span>
+              ${w.duration ? `<span class="entry-duration">${w.duration}</span>` : ''}
+            </div>
+            <span class="entry-arrow">→</span>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+
+    document.getElementById('catalogue-list').addEventListener('click', e => {
+      const entry = e.target.closest('[data-work-id]');
+      if (entry) openWork(entry.dataset.workId);
+    });
+  }
+
+  // ── Agenda complet ────────────────────────────
+  function renderAgenda() {
+    const sorted   = [...EVENTS].sort((a, b) => b.dateSort.localeCompare(a.dateSort));
+    const upcoming = sorted.filter(e => !e.past);
+    const past     = sorted.filter(e =>  e.past);
+
+    let html = '';
+    if (upcoming.length) {
+      html += `<p class="agenda-upcoming-label">À venir</p>`;
+      html += upcoming.map(agendaEventHTML).join('');
+    }
+
+    const pastByYear = {};
+    past.forEach(ev => {
+      const yr = ev.dateSort.slice(0, 4);
+      if (!pastByYear[yr]) pastByYear[yr] = [];
+      pastByYear[yr].push(ev);
+    });
+
+    Object.keys(pastByYear).sort((a, b) => b - a).forEach(yr => {
+      html += `<h2 class="agenda-year-heading">${yr}</h2>`;
+      html += pastByYear[yr].map(agendaEventHTML).join('');
+    });
+
+    document.getElementById('agenda-list').innerHTML = html;
+  }
+
+  function agendaEventHTML(ev) {
+    return `
+      <div class="agenda-event${ev.past ? ' past' : ''}">
+        <div><p class="agenda-event-date-main">${ev.date}</p></div>
+        <div>
+          <div class="agenda-event-type-row">
+            <span class="agenda-type-badge ${ev.type}">${capitalize(ev.type)}</span>
+            <span class="agenda-event-venue">${ev.venue}, ${ev.city}${ev.country !== 'France' ? ', ' + ev.country : ''}</span>
+          </div>
+          <p class="agenda-event-piece">${ev.piece}</p>
+          ${ev.pieceSub    ? `<p class="agenda-event-piece-sub">${ev.pieceSub}</p>` : ''}
+          ${ev.note        ? `<p class="agenda-event-note">${ev.note}</p>` : ''}
+          ${ev.context  ? `<p class="agenda-event-context">${ev.context}</p>` : ''}
+        </div>
+      </div>
+    `;
+  }
+/*           ${ev.context  ? `<p class="agenda-event-context">${ev.context}</p>` : ''} */
+
+  // ── Utilitaires ───────────────────────────────
+  function capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), 80);
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  function observeReveal() {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+  }
+
+  // ── Init ──────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    renderBio();
+    renderHomeGrid();
+    renderDatesPreview();
+    renderCatalogue('Tout');
+    renderAgenda();
+    observeReveal();
+    renderProtectedEmail(document.getElementById('footer-contact-email'));
+
+    // Nav globale
+    document.querySelector('nav').addEventListener('click', e => {
+      const link = e.target.closest('[data-nav]');
+      if (!link) return;
+      e.preventDefault();
+      showView(link.dataset.nav, link.dataset.anchor);
+    });
+
+    // Liens "→" dans les sections
+    document.addEventListener('click', e => {
+      const link = e.target.closest('[data-nav]');
+      if (!link || link.closest('nav')) return;
+      e.preventDefault();
+      showView(link.dataset.nav, link.dataset.anchor);
+    });
+
+    // Bouton retour de la fiche œuvre
+    document.getElementById('back-from-work').addEventListener('click', () => {
+      showView(previousView === 'catalogue' ? 'catalogue' : 'home');
+    });
+
+    document.getElementById('btn-prev').addEventListener('click', () => {
+      if (currentWorkIdx > 0) openWork(WORKS[currentWorkIdx - 1].id);
+    });
+
+    document.getElementById('btn-next').addEventListener('click', () => {
+      if (currentWorkIdx < WORKS.length - 1) openWork(WORKS[currentWorkIdx + 1].id);
+    });
+
+    // Charger la bonne vue depuis l'URL
+    const hash = window.location.hash.slice(1);
+    if (hash) routeFromHash(hash);
+
+    updateNavTone();
+    window.addEventListener('scroll', updateNavTone, { passive: true });
+    window.addEventListener('resize', updateNavTone);
+  });
+  </script>
+
+</body>
+</html>
