@@ -1074,7 +1074,7 @@ Compositeur et artiste sonore basé en région lyonnaise, Alexandre Craman const
     /* Informations factuelles affichées dans la sidebar */
     facts: [
       { key: "Né en",        val: "1995" },
-      { key: "Basé à",       val: "Lyon, France" },
+      { key: "Lieu de résidence",       val: "Lyon, France" },
       { key: "Formation",    val: "CNSMD de Lyon" },
       { key: "Spécialités",   val: "Musique électroacoustique, art sonore" },
       { key: "Contact",      val: "" }
@@ -1248,17 +1248,23 @@ Cette pièce est née du constat de l’omniprésence des sons produits par l’
      EVENTS — agenda
   ───────────────────────────────────────────────── */
   const EVENTS = [
+     {
+      date: "27 septembre 2026", dateSort: "2026-09-27",
+      type: "concert", venue: "空總國家文化基地 Kong Zong Cultural Base", city: "Taipei", country: "Taiwan",
+      piece: "<em>Surgical Extraction</em>", pieceSub: "Pièce acousmatique multicanale", context: "dans le cadre du festival Wandering organisé par le Taiwan Contemporary Culture Lab (C-LAB) ",
+      note: "Œuvre réalisée dans le cadre de l'académie Manifeste 2026", past: false
+    },
     {
       date: "23 mai 2026", dateSort: "2026-04-23",
       type: "creation", venue: "Chapelle de la Trinité", city: "Lyon", country: "France",
       piece: "<em>Saône</em>", pieceSub: "Pièce acousmatique stéréo", context: "dans le cadre de la journée 'ÉCOLOGIE SONORE EN CIRCUIT COURT' organisée par le GRAME",
-      note: "Oeuvre composée à partir d'enregistrements de terrain réalisés sur les bords de Saône entre Fontaines-sur-Saône et Collonges-au-Mont-d'Or", past: false
+      note: "Oeuvre composée à partir d'enregistrements de terrain réalisés sur les bords de Saône entre Fontaines-sur-Saône et Collonges-au-Mont-d'Or", past: true
     },
     {
       date: "27 juin 2026", dateSort: "2026-06-27",
       type: "creation", venue: "Espace de projection - IRCAM", city: "Paris", country: "France",
-      piece: "Nouvelle pièce", pieceSub: "Pour 8 hauts-parleurs", 
-      note: "Dans le cadre de l'académie Manifeste", past: false
+      piece: "Surgical Extraction", pieceSub: "Pour 8 hauts-parleurs", 
+      note: "Dans le cadre de l'académie Manifeste 2026", past: true
     },
     {
       date: "26 février 2026", dateSort: "2026-02-16",
@@ -1300,7 +1306,7 @@ Cette pièce est née du constat de l’omniprésence des sons produits par l’
       date: "Du 15 au 27 juin 2026", dateSort: "2026-06-15",
       type: "academie", venue: "IRCAM", city: "Paris", country: "France",
       piece: "<em>Académie Manifeste</em>", pieceSub: "",
-      note: "Programme in-situ composition électronique", context: "", past: false
+      note: "Programme in-situ composition électronique", context: "", past: true
     },
     {
       date: "juin 2021", dateSort: "2021-06-01",
